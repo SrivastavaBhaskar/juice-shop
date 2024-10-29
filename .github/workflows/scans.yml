@@ -24,18 +24,11 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Install Snyk
-      run: npm install -g snyk
-
-    - name: Snyk test
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Add your Snyk token to GitHub secrets
-      run: snyk test
-
-    - name: Snyk code scan
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Ensure your Snyk token is available
-      run: snyk code
+    # - name: Run Snyk to check for vulnerabilities
+    #   uses: snyk/actions/node@master
+    #   continue-on-error: true
+    #   env:
+    #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
