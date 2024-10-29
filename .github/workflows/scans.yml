@@ -1,0 +1,43 @@
+name: Scans
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20' # Specify the Node.js version you need
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Install Snyk
+      run: npm install -g snyk
+
+    - name: Snyk test
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Add your Snyk token to GitHub secrets
+      run: snyk test
+
+    - name: Snyk code scan
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Ensure your Snyk token is available
+      run: snyk code
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
